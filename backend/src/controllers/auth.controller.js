@@ -26,10 +26,12 @@ export const signUp = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        const {username, password} = req.body;
+        const {email, password} = req.body;
+
+        const user = await findUserByEmail(email);
 
         if (!user) {
-            res.status(401).json({message: 'Username doesnot exists!'});
+            res.status(401).json({message: 'User with this email doesnot exists!'});
             return;
         }
 
