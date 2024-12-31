@@ -1,0 +1,28 @@
+[2024-12-31T16:26:38.449Z] INFO: Incoming Request: POST /auth/signup
+[2024-12-31T16:26:38.491Z] INFO: Response: POST /auth/signup - 401 [42ms]
+[2024-12-31T16:26:53.370Z] INFO: Incoming Request: POST /auth/signup
+[2024-12-31T16:26:53.404Z] INFO: Response: POST /auth/signup - 401 [34ms]
+[2024-12-31T16:29:30.581Z] INFO: Incoming Request: POST /auth/login
+[2024-12-31T16:29:30.676Z] ERROR: Error : Converting circular structure to JSON
+    --> starting at object with constructor 'Socket'
+    |     property 'parser' -> object with constructor 'HTTPParser'
+    --- property 'socket' closes the circle
+[2024-12-31T16:29:30.678Z] INFO: Response: POST /auth/login - 500 [98ms]
+[2024-12-31T16:29:52.546Z] INFO: Incoming Request: POST /auth/login
+[2024-12-31T16:29:52.628Z] ERROR: Error : Converting circular structure to JSON
+    --> starting at object with constructor 'Socket'
+    |     property 'parser' -> object with constructor 'HTTPParser'
+    --- property 'socket' closes the circle
+[2024-12-31T16:29:52.629Z] INFO: Response: POST /auth/login - 500 [83ms]
+[2024-12-31T16:30:36.958Z] INFO: Incoming Request: POST /auth/login
+[2024-12-31T16:30:37.035Z] ERROR: Error : Converting circular structure to JSON
+    --> starting at object with constructor 'Socket'
+    |     property 'parser' -> object with constructor 'HTTPParser'
+    --- property 'socket' closes the circle
+[2024-12-31T16:30:37.035Z] INFO: Response: POST /auth/login - 500 [77ms]
+[2024-12-31T16:31:37.872Z] INFO: Incoming Request: POST /auth/login
+[2024-12-31T16:31:37.969Z] INFO: Response: POST /auth/login - 500 [97ms]
+[2024-12-31T16:32:08.438Z] INFO: Incoming Request: POST /auth/login
+[2024-12-31T16:32:08.532Z] INFO: Response: POST /auth/login - 201 [95ms]
+[2024-12-31T16:32:21.904Z] INFO: Incoming Request: POST /auth/login
+[2024-12-31T16:32:21.988Z] INFO: Response: POST /auth/login - 201 [85ms]

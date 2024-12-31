@@ -11,8 +11,9 @@ export const generateJWTAndSetToCookie = (userId, email , res) => {
         maxAge: 15 * 24 * 60 * 60 * 1000
     });
 
+    return token;
 };
-const generateJWTToken = (userId) => {
+const generateJWTToken = (userId, email) => {
     const token = jwt.sign({userId, email}, process.env.JWT_SECRET, {
         expiresIn: '15d'
     });
