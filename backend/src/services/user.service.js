@@ -25,6 +25,25 @@ export async function findUserByEmail(email) {
     } catch (error) {
         logger.error(`Error finding user by email: ${error.message}`);
     } finally {
-        await prisma.$disconnect(); // Ensures the connection is closed
+        await prisma.$disconnect();
+    }
+}
+
+export async function updateUser(userId, updates) {
+    try {
+        const updatedUser = await prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: updates,
+        });
+
+        logger.info(`Updated user: ${JSON.stringify(updatedUser)}`);
+        return updatedUser;
+    } catch (error) {
+        logger.error(`Error finding user by email: ${error.message}`);
+        throw error;
+    } finally {
+        await prisma.$disconnect();
     }
 }

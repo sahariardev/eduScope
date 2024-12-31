@@ -2,6 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import authRouter from "./routes/auth.router.js";
 import logger from "./services/logger.service.js";
+import {verifyToken} from "./middleware/verifyToken.middleware.js";
+import userRoute from "./routes/user.route.js";
 
 const app = express();
 app.use(cors())
@@ -23,4 +25,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/auth', authRouter);
+app.use('/app', verifyToken)
+app.use('/app/user', userRoute);
 export default app;

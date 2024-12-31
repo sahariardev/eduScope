@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import {generateJWTAndSetToCookie} from "../util/jwt.util.js";
-import {findUserByEmail, saveUser} from "../services/user.service.js";
+import {findUserByEmail, saveUser, updateUser} from "../services/user.service.js";
 import User from "../models/user.model.js";
 import logger from "../services/logger.service.js";
 
@@ -45,7 +45,6 @@ export const login = async (req, res) => {
         const token = generateJWTAndSetToCookie(user.id, user.email, res);
         res.status(201).json({token: token});
     } catch (error) {
-
         logger.error(`Error : ${error.message}`);
         res.status(500).json({message: 'User login failed'});
     }
