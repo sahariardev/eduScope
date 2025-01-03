@@ -1,8 +1,11 @@
 import {Router} from "express";
 import {changeName, changePassword} from "../controllers/user.controller.js";
-const authRouter = new Router();
+const userRouter = new Router();
 
-authRouter.post('/updateName', changeName);
-authRouter.post('/updatePassword', changePassword);
+userRouter.post('/updateName', changeName);
+userRouter.post('/updatePassword', changePassword);
+userRouter.get('/test', (req, res) => {
+    res.json({message: "Hellow"})
+});
 
-export default authRouter;
+export default userRouter;

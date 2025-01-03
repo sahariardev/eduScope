@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
+import {findUserByEmail} from "../services/user.service.js";
 
-export const verifyToken = (req, res, next) => {
+export const verifyToken = async (req, res, next) => {
     const token = req.cookies.jwt;
 
     if(!token) {
@@ -12,7 +13,7 @@ export const verifyToken = (req, res, next) => {
     try {
         const decodeToken = jwt.verify(token, process.env.JWT_SECRET);
         req.userEmail = decodeToken.email
-        console.log(decodeToken)
+        req.user = await findUserByEmail(req.userEmail);
         next();
     } catch (e) {
         console.log(e);

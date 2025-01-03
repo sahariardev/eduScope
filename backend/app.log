@@ -26,3 +26,17 @@
 [2024-12-31T16:32:08.532Z] INFO: Response: POST /auth/login - 201 [95ms]
 [2024-12-31T16:32:21.904Z] INFO: Incoming Request: POST /auth/login
 [2024-12-31T16:32:21.988Z] INFO: Response: POST /auth/login - 201 [85ms]
+[2025-01-03T04:22:53.919Z] INFO: Incoming Request: POST /auth/login
+[2025-01-03T04:22:54.025Z] INFO: Response: POST /auth/login - 201 [107ms]
+[2025-01-03T04:27:22.628Z] INFO: Incoming Request: GET /app/user/test
+[2025-01-03T04:27:22.633Z] INFO: Response: GET /app/user/test - 500 [5ms]
+[2025-01-03T04:29:18.176Z] INFO: Incoming Request: GET /app/user/test
+[2025-01-03T04:29:18.190Z] INFO: Response: GET /app/user/test - 500 [15ms]
+[2025-01-03T04:29:29.415Z] INFO: Incoming Request: POST /auth/login
+[2025-01-03T04:29:29.508Z] INFO: Response: POST /auth/login - 201 [93ms]
+[2025-01-03T04:31:05.773Z] INFO: Incoming Request: POST /auth/login
+[2025-01-03T04:31:05.875Z] INFO: Response: POST /auth/login - 201 [103ms]
+[2025-01-03T04:31:08.519Z] INFO: Incoming Request: GET /app/user/test
+[2025-01-03T04:31:08.530Z] INFO: Response: GET /app/user/test - 200 [11ms]
+[2025-01-03T04:32:00.551Z] INFO: Incoming Request: GET /app/user/test
+[2025-01-03T04:32:00.588Z] INFO: Response: GET /app/user/test - 200 [37ms]
