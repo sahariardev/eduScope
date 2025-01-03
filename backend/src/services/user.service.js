@@ -13,6 +13,19 @@ export async function saveUser(user) {
     return userData;
 }
 
+export async function findAllUser() {
+    try {
+        return await prisma.user.findMany().map(u => {
+            u.password = ''
+            return u;
+        });
+    } catch (error) {
+        logger.error(`Error finding user by email: ${error.message}`);
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+
 export async function findUserByEmail(email) {
     try {
         const user = await prisma.user.findUnique({
