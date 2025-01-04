@@ -5,6 +5,8 @@ import authRouter from "./routes/auth.router.js";
 import logger from "./services/logger.service.js";
 import {verifyToken} from "./middleware/verifyToken.middleware.js";
 import userRoute from "./routes/user.route.js";
+import uploadRouter from "./routes/video.upload.router.js";
+import {adminChecker} from "./middleware/admin.middleware.js";
 
 const app = express();
 app.use(cookieParser())
@@ -29,4 +31,5 @@ app.use((req, res, next) => {
 app.use('/auth', authRouter);
 app.use('/app', verifyToken)
 app.use('/app/user', userRoute);
+app.use('/app/upload', adminChecker, uploadRouter);
 export default app;
