@@ -3,7 +3,7 @@ import logger from "../services/logger.service.js";
 
 export const initializeUpload = async (req, res) => {
     try {
-        console.log('Initializing upload');
+        logger.info(`Initializing upload`);
         const {filename} = req.body;
         AWS.config.update({
             region: process.env.AWS_REGION,
