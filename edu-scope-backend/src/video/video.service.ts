@@ -1,7 +1,7 @@
-import {Body, Injectable, Logger, UploadedFile} from '@nestjs/common';
+import {Injectable, Logger} from '@nestjs/common';
 import AWS from "aws-sdk";
 import {ConfigService} from "@nestjs/config";
-import {VideoChunkUploadDto, VideoUploadInitializeDto} from "./dro";
+import {VideoChunkUploadDto, VideoUploadCompleteDto, VideoUploadInitializeDto} from "./dro";
 
 @Injectable()
 export class VideoService {
@@ -67,6 +67,36 @@ export class VideoService {
             return {success: true, ETag: data.ETag, partNumber: partNumber};
         } catch (error) {
             this.logger.log(error);
+            return {message: 'Upload failed'};
+        }
+    }
+
+    completeUpload(dto: VideoUploadCompleteDto) {
+        try {
+            this.logger.log('Completing Upload');
+            const uploadParts = [];
+            const s3 = new AWS.S3({
+                region: 'us-east-1',
+                accessKeyId: this.configService.get('AWS_SECRECT_ACCESS_ID'),
+                secretAccessKey: this.configService.get('AWS_SECRECT_ACCESS_KEY')
+            });
+
+            console.log(JSON.parse(etags));
+
+            const completeParams = {
+                Bucket: this.configService.get('AWS_BUCKET'),
+                Key: dto.fileName,
+                UploadId: dto.uploadId,
+                MultipartUpload: {Parts: JSON.parse(dto.etags)}
+            }
+
+            this.logger.log(completeParams);
+
+            const completeRes = await s3.completeMultipartUpload(completeParams).promise();
+            return {message: "Uploaded successfully"}
+
+        } catch (error) {
+            this.logger.error(error);
             return {message: 'Upload failed'};
         }
     }

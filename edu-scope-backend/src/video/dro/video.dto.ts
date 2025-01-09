@@ -18,3 +18,20 @@ export class VideoChunkUploadDto {
     @IsString
     uploadId: string;
 }
+
+export class VideoUploadCompleteDto {
+    @IsNotEmpty
+    @IsString
+    fileName: string;
+
+    @IsNotEmpty
+    @IS_NUMBER
+    totalChunks: number;
+
+    @IsNotEmpty
+    @IsString
+    uploadId: string;
+
+    @IsString
+    etags: string
+}
