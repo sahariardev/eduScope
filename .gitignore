@@ -1,3 +1,6 @@
 edu-scope-backend/node_modules/
 edu-scope-backend/dist/
 .idea
+edu-scope-client/.env
+edu-scope-backend/.env
+edu-scope-backend/.originalenv

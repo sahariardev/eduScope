@@ -4,6 +4,7 @@ import {Body, Controller, Post, UploadedFile, UseInterceptors} from '@nestjs/com
 import {FileInterceptor} from "@nestjs/platform-express";
 import {VideoChunkUploadDto, VideoUploadCompleteDto, VideoUploadInitializeDto} from "./dro";
 import {VideoService} from "./video.service";
+import {Public} from "../app.utils";
 
 @Controller('video')
 export class VideoController {
@@ -11,20 +12,22 @@ export class VideoController {
     }
 
     @Post('initialize')
-    initializeUpload(@Body dto: VideoUploadInitializeDto) {
+    @Public()
+    initializeUpload(@Body() dto: VideoUploadInitializeDto) {
         return this.videoService.initializeUpload(dto);
     }
 
     @Post('uploadChunk')
+    @Public()
     @UseInterceptors(FileInterceptor('file'))
-    uploadFile(@UploadedFile() file: Express.Multer.File, @Body dto: VideoChunkUploadDto) {
+    uploadFile(@UploadedFile() file: Express.Multer.File, @Body() dto: VideoChunkUploadDto) {
         return this.videoService.uploadChunk(file, dto);
     }
 
     @Post('completeUpload')
-    uploadCompleted(@Body dto: VideoUploadCompleteDto) {
-
+    @Public()
+    uploadCompleted(@Body() dto: VideoUploadCompleteDto) {
+        return this.videoService.completeUpload(dto)
     }
-
 
 }

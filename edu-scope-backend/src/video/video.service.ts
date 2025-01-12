@@ -1,7 +1,13 @@
 import {Injectable, Logger} from '@nestjs/common';
-import AWS from "aws-sdk";
 import {ConfigService} from "@nestjs/config";
 import {VideoChunkUploadDto, VideoUploadCompleteDto, VideoUploadInitializeDto} from "./dro";
+import {
+    CompleteMultipartUploadCommand,
+    CreateMultipartUploadCommand,
+    S3Client,
+    UploadPartCommand
+} from "@aws-sdk/client-s3";
+import {NodeHttpHandler} from "@aws-sdk/node-http-handler";
 
 @Injectable()
 export class VideoService {
@@ -15,20 +21,22 @@ export class VideoService {
         try {
             this.logger.log('Initializing upload');
             const filename = dto.fileName;
-            AWS.config.update({
-                region: 'us-east-1',
-                accessKeyId: this.configService.get('AWS_SECRECT_ACCESS_ID'),
-                secretAccessKey: this.configService.get('AWS_SECRECT_ACCESS_KEY')
-            });
+            const s3Client = new S3Client({
+                    region: this.configService.get('AWS_S3_REGION'),
+                    credentials: {
+                        accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
+                        secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+                    }
+                }
+            );
 
-            const s3 = new AWS.S3();
-
-            const params = {
+            const createCommand = new CreateMultipartUploadCommand({
                 Bucket: this.configService.get('AWS_BUCKET'),
                 Key: filename,
                 ContentType: 'video/mp4'
-            }
-            const multiPartParams = await s3.createMultipartUpload(params).promise();
+            });
+
+            const multiPartParams = await s3Client.send(createCommand);
 
             this.logger.log(multiPartParams);
 
@@ -43,14 +51,22 @@ export class VideoService {
     async uploadChunk(file: Express.Multer.File, dto: VideoChunkUploadDto) {
         this.logger.log("chunking uploading");
         try {
-            const s3 = new AWS.S3({
-                region: 'us-east-1',
-                accessKeyId: this.configService.get('AWS_SECRECT_ACCESS_ID'),
-                secretAccessKey: this.configService.get('AWS_SECRECT_ACCESS_KEY')
-            });
+            const s3Client = new S3Client({
+                    region: this.configService.get('AWS_S3_REGION'),
+                    credentials: {
+                        accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
+                        secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+                    },
+                    requestHandler: new NodeHttpHandler({
+                        connectionTimeout: 300000, // 5 minutes
+                        socketTimeout: 300000,    // 5 minutes
+                    }),
+                }
+            );
 
             const bucketName = this.configService.get('AWS_BUCKET');
             const partNumber = dto.chunkIndex + 1;
+
 
             const params = {
                 Bucket: bucketName,
@@ -60,28 +76,40 @@ export class VideoService {
                 Body: file.buffer
             }
 
+            const uploadPartCommand = new UploadPartCommand(params);
+
             this.logger.log("putting chunk to s3");
+            this.logger.log(dto);
 
-            const data = await s3.uploadPart(params).promise();
+            const response = await s3Client.send(uploadPartCommand);
 
-            return {success: true, ETag: data.ETag, partNumber: partNumber};
+            this.logger.log(response);
+
+            return {success: true, ETag: response.ETag, partNumber: partNumber};
         } catch (error) {
             this.logger.log(error);
             return {message: 'Upload failed'};
         }
     }
 
-    completeUpload(dto: VideoUploadCompleteDto) {
+    async completeUpload(dto: VideoUploadCompleteDto) {
         try {
             this.logger.log('Completing Upload');
             const uploadParts = [];
-            const s3 = new AWS.S3({
-                region: 'us-east-1',
-                accessKeyId: this.configService.get('AWS_SECRECT_ACCESS_ID'),
-                secretAccessKey: this.configService.get('AWS_SECRECT_ACCESS_KEY')
-            });
+            const s3Client = new S3Client({
+                    region: this.configService.get('AWS_S3_REGION'),
+                    credentials: {
+                        accessKeyId: this.configService.get('AWS_ACCESS_KEY_ID'),
+                        secretAccessKey: this.configService.get('AWS_SECRET_ACCESS_KEY'),
+                    },
+                    requestHandler: new NodeHttpHandler({
+                        connectionTimeout: 300000, // 5 minutes
+                        socketTimeout: 300000,    // 5 minutes
+                    }),
+                }
+            );
 
-            console.log(JSON.parse(etags));
+            this.logger.log(JSON.parse(dto.etags));
 
             const completeParams = {
                 Bucket: this.configService.get('AWS_BUCKET'),
@@ -90,9 +118,11 @@ export class VideoService {
                 MultipartUpload: {Parts: JSON.parse(dto.etags)}
             }
 
+            const completeCommand = new CompleteMultipartUploadCommand(completeParams);
+
             this.logger.log(completeParams);
 
-            const completeRes = await s3.completeMultipartUpload(completeParams).promise();
+            const completeRes = await s3Client.send(completeCommand);
             return {message: "Uploaded successfully"}
 
         } catch (error) {

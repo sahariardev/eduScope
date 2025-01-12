@@ -1,4 +1,4 @@
-import {IS_NUMBER, IsEmail, IsNotEmpty, IsString} from "class-validator";
+import {IsNotEmpty, IsString} from "class-validator";
 
 export class VideoUploadInitializeDto {
     @IsNotEmpty()
@@ -6,32 +6,30 @@ export class VideoUploadInitializeDto {
 }
 
 export class VideoChunkUploadDto {
-    @IsNotEmpty
-    @IsString
+    @IsNotEmpty()
+    @IsString()
     fileName: string;
 
-    @IsNotEmpty
-    @IS_NUMBER
+    @IsNotEmpty()
     chunkIndex: number;
 
-    @IsNotEmpty
-    @IsString
+    @IsNotEmpty()
+    @IsString()
     uploadId: string;
 }
 
 export class VideoUploadCompleteDto {
-    @IsNotEmpty
-    @IsString
+    @IsNotEmpty()
+    @IsString()
     fileName: string;
 
-    @IsNotEmpty
-    @IS_NUMBER
+    @IsNotEmpty()
     totalChunks: number;
 
-    @IsNotEmpty
-    @IsString
+    @IsNotEmpty()
+    @IsString()
     uploadId: string;
 
-    @IsString
+    @IsString()
     etags: string
 }
