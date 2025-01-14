@@ -5,6 +5,7 @@ import {VideoModule} from './video/video.module';
 import {PrismaModule} from './prisma/prisma.module';
 import {ConfigModule} from "@nestjs/config";
 import {HttpModule} from '@nestjs/axios';
+import { SqsModule } from './sqs/sqs.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import {HttpModule} from '@nestjs/axios';
         UserModule,
         VideoModule,
         PrismaModule,
+        SqsModule,
     ],
 })
 export class AppModule {

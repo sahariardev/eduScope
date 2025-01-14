@@ -2,7 +2,7 @@
 
 import {Body, Controller, Post, UploadedFile, UseInterceptors} from '@nestjs/common';
 import {FileInterceptor} from "@nestjs/platform-express";
-import {VideoChunkUploadDto, VideoUploadCompleteDto, VideoUploadInitializeDto} from "./dro";
+import {VideoChunkUploadDto, VideoUploadCompleteDto, VideoUploadInitializeDto} from "./dto";
 import {VideoService} from "./video.service";
 import {Public} from "../app.utils";
 

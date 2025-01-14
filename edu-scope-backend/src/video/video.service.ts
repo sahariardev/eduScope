@@ -1,6 +1,6 @@
 import {Injectable, Logger} from '@nestjs/common';
 import {ConfigService} from "@nestjs/config";
-import {VideoChunkUploadDto, VideoUploadCompleteDto, VideoUploadInitializeDto} from "./dro";
+import {VideoChunkUploadDto, VideoUploadCompleteDto, VideoUploadInitializeDto} from "./dto";
 import {
     CompleteMultipartUploadCommand,
     CreateMultipartUploadCommand,
@@ -8,13 +8,14 @@ import {
     UploadPartCommand
 } from "@aws-sdk/client-s3";
 import {NodeHttpHandler} from "@aws-sdk/node-http-handler";
+import {SqsService} from "../sqs/sqs.service";
 
 @Injectable()
 export class VideoService {
 
     private readonly logger = new Logger(VideoService.name);
 
-    constructor(private configService: ConfigService) {
+    constructor(private configService: ConfigService, private sqsService: SqsService) {
     }
 
     async initializeUpload(dto: VideoUploadInitializeDto) {
@@ -123,6 +124,15 @@ export class VideoService {
             this.logger.log(completeParams);
 
             const completeRes = await s3Client.send(completeCommand);
+            // noinspection TypeScriptUnresolvedReference
+            const key = completeRes.Key;
+            // noinspection TypeScriptUnresolvedReference
+            const location = completeRes.Location;
+
+            //send this data to database
+            //send this data to sqs
+            this.sqsService.sendMessage({key, location});
+            console.log("recievied", this.sqsService.receiveMessages());
             return {message: "Uploaded successfully"}
 
         } catch (error) {
