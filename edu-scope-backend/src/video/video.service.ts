@@ -32,7 +32,7 @@ export class VideoService {
             );
 
             const createCommand = new CreateMultipartUploadCommand({
-                Bucket: this.configService.get('AWS_BUCKET'),
+                Bucket: this.configService.get('AWS_VIDEO_UPLOAD_BUCKET'),
                 Key: filename,
                 ContentType: 'video/mp4'
             });
@@ -65,7 +65,7 @@ export class VideoService {
                 }
             );
 
-            const bucketName = this.configService.get('AWS_BUCKET');
+            const bucketName = this.configService.get('AWS_VIDEO_UPLOAD_BUCKET');
             const partNumber = dto.chunkIndex + 1;
 
 
@@ -113,7 +113,7 @@ export class VideoService {
             this.logger.log(JSON.parse(dto.etags));
 
             const completeParams = {
-                Bucket: this.configService.get('AWS_BUCKET'),
+                Bucket: this.configService.get('AWS_VIDEO_UPLOAD_BUCKET'),
                 Key: dto.fileName,
                 UploadId: dto.uploadId,
                 MultipartUpload: {Parts: JSON.parse(dto.etags)}

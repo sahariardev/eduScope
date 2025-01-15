@@ -1,6 +1,8 @@
 import {Injectable, Logger, OnModuleInit} from '@nestjs/common';
 import * as AWS from 'aws-sdk';
 import {ConfigService} from "@nestjs/config";
+import {Cron, CronExpression} from "@nestjs/schedule";
+import {TranscoderService} from "../transcoder/transcoder.service";
 
 @Injectable()
 export class SqsService implements OnModuleInit {
@@ -9,7 +11,7 @@ export class SqsService implements OnModuleInit {
 
     private readonly sqs: AWS.SQS;
 
-    constructor(private config: ConfigService) {
+    constructor(private config: ConfigService, private transcoderService : TranscoderService) {
         this.sqs = new AWS.SQS({
             region: 'us-east-1', // Replace with your AWS region
             accessKeyId: this.config.get('AWS_ACCESS_KEY_ID'),
@@ -29,14 +31,15 @@ export class SqsService implements OnModuleInit {
         };
 
         try {
-            const result = await this.sqs.sendMessage(params).promise();
-            this.logger.log('Message sent:', result.MessageId);
+            const message = await this.sqs.sendMessage(params).promise();
+
+            this.logger.log('Message sent:', message.MessageId);
         } catch (error) {
             this.logger.error('Error sending message:', error);
         }
     }
 
-    // Method to receive messages
+    @Cron(CronExpression.EVERY_30_SECONDS)
     async receiveMessages(): Promise<void> {
         const params = {
             QueueUrl: this.config.get('AWS_SQS_URL'),
@@ -49,6 +52,9 @@ export class SqsService implements OnModuleInit {
             if (result.Messages) {
                 for (const message of result.Messages) {
                     this.logger.log('Received message:', message.Body);
+                    //send it for transcoding
+
+                    //this.transcoderService.convertToHlsFormat(message.Body.key);
                     await this.deleteMessage(message.ReceiptHandle);
                 }
             } else {

@@ -6,6 +6,8 @@ import {PrismaModule} from './prisma/prisma.module';
 import {ConfigModule} from "@nestjs/config";
 import {HttpModule} from '@nestjs/axios';
 import { SqsModule } from './sqs/sqs.module';
+import {ScheduleModule} from "@nestjs/schedule";
+import { TranscoderModule } from './transcoder/transcoder.module';
 
 @Module({
     imports: [
@@ -17,11 +19,13 @@ import { SqsModule } from './sqs/sqs.module';
         ConfigModule.forRoot({
             isGlobal: true,
         }),
+        ScheduleModule.forRoot(),
         AuthModule,
         UserModule,
         VideoModule,
         PrismaModule,
         SqsModule,
+        TranscoderModule,
     ],
 })
 export class AppModule {
