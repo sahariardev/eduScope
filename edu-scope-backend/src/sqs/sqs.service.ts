@@ -52,10 +52,12 @@ export class SqsService implements OnModuleInit {
             if (result.Messages) {
                 for (const message of result.Messages) {
                     this.logger.log('Received message:', message.Body);
-                    //send it for transcoding
 
-                    //this.transcoderService.convertToHlsFormat(message.Body.key);
-                    await this.deleteMessage(message.ReceiptHandle);
+                    const processDone = await this.transcoderService.convertToHlsFormat(JSON.parse(message.Body).key);
+
+                    if (processDone) {
+                        await this.deleteMessage(message.ReceiptHandle);
+                    }
                 }
             } else {
                 this.logger.log('No messages available.');

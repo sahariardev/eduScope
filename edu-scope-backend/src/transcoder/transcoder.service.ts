@@ -3,8 +3,8 @@ import * as AWS from "aws-sdk";
 import {ConfigService} from "@nestjs/config";
 import * as fluentFfmpeg from "fluent-ffmpeg";
 import * as ffmpegStatic from "@ffmpeg-installer/ffmpeg";
-import fs from "fs";
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
 
 @Injectable()
 export class TranscoderService {
@@ -15,22 +15,22 @@ export class TranscoderService {
     private readonly resolutions = [
         {
             resolution: '320x180',
-            videRate: '500k',
+            videoRate: '500k',
             audioRate: '64k',
             bandwidth: 676800
         },
         {
-            resolution: '320x180',
-            videRate: '500k',
-            audioRate: '64k',
+            resolution: '640x360',
+            videoRate: '1000k',
+            audioRate: '128k',
             bandwidth: 1353600
         },
         {
-            resolution: '320x180',
-            videRate: '500k',
-            audioRate: '64k',
+            resolution: '1280x720',
+            videoRate: '2500k',
+            audioRate: '192k',
             bandwidth: 3230400
-        }
+        },
     ];
 
     constructor(private config: ConfigService) {
@@ -67,15 +67,15 @@ export class TranscoderService {
 
             const variantPlayLists = [];
 
-            for (const {resolution, videRate, audioRate, bandwidth} of this.resolutions) {
+            for (const {resolution, videoRate, audioRate, bandwidth} of this.resolutions) {
                 const outputFilename = `${key.replace('.', '_')}_${resolution}.m3u8`;
                 const segmentFilename = `${key.replace('.', '_')}_${resolution}_%03d.ts`;
                 const outputFilenameWithFolder = `output/${outputFilename}`;
 
                 await new Promise((resolve, reject) => {
-                    fluentFfmpeg(key).outputOptions([
+                    fluentFfmpeg('local.mp4').outputOptions([
                         `-c:v h264`,
-                        `-b:v ${videRate}`,
+                        `-b:v ${videoRate}`,
                         `-c:a aac`,
                         `-b:a ${audioRate}`,
                         `-vf scale=${resolution}`,
@@ -124,7 +124,7 @@ export class TranscoderService {
 
                 const uploadParams = {
                     Bucket: this.config.get('AWS_VIDEO_HLS_BUCKET'),
-                    Key: `output/${file}`,
+                    Key: `${key.replace('.mp4', '')}/${file}`,
                     Body: fileStream,
                     ContentType: file.endsWith('.ts') ? 'video/mp2t' : file.endsWith('.m3u8') ? 'application/x-mpegURL' : null
                 }
@@ -132,8 +132,11 @@ export class TranscoderService {
                 await this.s3.upload(uploadParams).promise();
                 fs.unlinkSync(filePath);
             }
+
+            return true;
         } catch (error) {
             this.logger.error(error);
+            return false;
         }
     }
 }
