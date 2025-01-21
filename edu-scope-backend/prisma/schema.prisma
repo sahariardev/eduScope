@@ -14,13 +14,58 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String
-  password  String
-  isAdmin   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  name           String
+  password       String
+  isAdmin        Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  courses        Course[]
+  lessons        Lesson[]
+  videosUploaded Video[]
 
   @@map("users")
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById Int
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  lessons     Lesson[]
+
+  @@map("courses")
+}
+
+model Lesson {
+  id          Int      @id @default(autoincrement())
+  course      Course   @relation(fields: [courseId], references: [id])
+  courseId    Int
+  video       Video?   @relation(fields: [videoId], references: [id])
+  videoId     Int?     @unique
+  text        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById Int
+  createdBy   User     @relation(fields: [createdById], references: [id])
+
+  @@map("lessons")
+}
+
+model Video {
+  id          Int      @id @default(autoincrement())
+  title       String
+  link        String?
+  key         String
+  lesson      Lesson?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById Int
+  createdBy   User     @relation(fields: [createdById], references: [id])
+
+  @@map("videos")
 }

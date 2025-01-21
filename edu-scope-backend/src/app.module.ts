@@ -8,6 +8,7 @@ import {HttpModule} from '@nestjs/axios';
 import { SqsModule } from './sqs/sqs.module';
 import {ScheduleModule} from "@nestjs/schedule";
 import { TranscoderModule } from './transcoder/transcoder.module';
+import { CourseModule } from './course/course.module';
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ import { TranscoderModule } from './transcoder/transcoder.module';
         PrismaModule,
         SqsModule,
         TranscoderModule,
+        CourseModule,
     ],
 })
 export class AppModule {
