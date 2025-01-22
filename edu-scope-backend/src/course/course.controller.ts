@@ -1,4 +1,4 @@
-import {Body, Controller, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {CourseService} from "./course.service";
 import {CourseDto} from "./dto";
 
@@ -8,7 +8,19 @@ export class CourseController {
     }
 
     @Post('save')
-    signup(@Body() dto: CourseDto) {
+    save(@Body() dto: CourseDto) {
         return this.courseService.save(dto);
+    }
+
+    @Get(':id')
+    get(@Param("id") id: number) {
+        return this.courseService.getCourse(id);
+    }
+
+    @Get(':courseId/user/:userId')
+    enroll(@Param('userId') userId: string,
+           @Param('courseId') courseId: string,) {
+
+        //todo enroll user to a course
     }
 }
