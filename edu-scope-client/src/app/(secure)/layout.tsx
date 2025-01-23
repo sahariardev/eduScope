@@ -1,13 +1,24 @@
 'use client'
 import {ReactNode, useState} from "react";
+import Link from "next/link";
+import {useHeaderStore} from "@/app/hooks/useHeaderStore";
+import {useRouter} from "next/navigation";
+import PageTitle from "@/app/components/pageTitle";
 
 interface Props {
     children: ReactNode;
 }
 
-
 const MainLayout = ({children}: Props) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const {headerName, updateHeaderName} = useHeaderStore();
+    const router = useRouter();
+
+    const handleRouteClick = (e) => {
+        e.preventDefault();
+        updateHeaderName(e.target.dataset.title);
+        router.push(e.target.href);
+    }
 
     return (
         <div className="flex h-screen">
@@ -27,13 +38,17 @@ const MainLayout = ({children}: Props) => {
                     EduScope
                 </div>
                 <nav className="flex-grow p-4 space-y-4">
-                    <a href="#" className="block px-4 py-2 rounded hover:bg-gray-700">
+                    <a href="/dashboard" className="block px-4 py-2 rounded hover:bg-gray-700" data-title="Dashboard"
+                       onClick={handleRouteClick}>
                         Dashboard
                     </a>
-                    <a href="#" className="block px-4 py-2 rounded hover:bg-gray-700">
+                    <a href="/course" className="block px-4 py-2 rounded hover:bg-gray-700" data-title="Courses" onClick={handleRouteClick}>
+                        Courses
+                    </a>
+                    <a href="#" className="block px-4 py-2 rounded hover:bg-gray-700" onClick={handleRouteClick}>
                         Settings
                     </a>
-                    <a href="#" className="block px-4 py-2 rounded hover:bg-gray-700">
+                    <a href="#" className="block px-4 py-2 rounded hover:bg-gray-700" onClick={handleRouteClick}>
                         Profile
                     </a>
                 </nav>
@@ -45,7 +60,7 @@ const MainLayout = ({children}: Props) => {
             </aside>
 
             <main className="flex-1 bg-gray-100 p-8 overflow-auto">
-                <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+                <PageTitle/>
                 <div className="text-gray-700">
                     {children}
                 </div>
