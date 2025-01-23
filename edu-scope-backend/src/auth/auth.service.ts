@@ -5,6 +5,7 @@ import {PrismaService} from "../prisma/prisma.service";
 import {PrismaClientKnownRequestError} from "@prisma/client/runtime/library";
 import {JwtService} from '@nestjs/jwt';
 import {ConfigService} from "@nestjs/config";
+import {Response} from 'express';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,7 @@ export class AuthService {
                 private jwtService: JwtService) {
     }
 
-    async signup(dto: AuthDto) {
+    async signup(dto: AuthDto, res: Response) {
         const hashedPassword = await argon2.hash(dto.password);
 
         try {
@@ -26,8 +27,17 @@ export class AuthService {
                 }
             });
 
+            const token = await this.signToken(user.id, user.email);
+
+            res.cookie('jwt', token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'strict',
+                maxAge: 24 * 60 * 60 * 1000,
+            });
+
             return {
-                access_token: await this.signToken(user.id, user.email),
+                access_token: token,
             };
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {

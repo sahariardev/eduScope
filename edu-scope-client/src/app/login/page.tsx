@@ -1,22 +1,48 @@
+"use client"
 import Link from "next/link";
+import React, {useState} from "react";
 
 export default function Login() {
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [errors, setErrors] = useState<{ email: string, password: string }>({
+        email: "",
+        password: ""
+    })
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setErrors({
+            email: "",
+            password: ""
+        });
+
+        //send ajax request
+    }
+
     return (
         <div className="bg-gray-200 h-screen w-screen flex items-center justify-center">
             <div className="flex w-1/4 flex-col justify-center px-6 py-12 lg:px-8 bg-white rounded-lg">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your
+                    <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Login to your
                         account</h2>
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" onSubmit={handleSubmit}>
                         <div>
                             <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">Email
                                 address</label>
                             <div className="mt-2">
-                                <input type="email" name="email" id="email" autoComplete="email" required
+                                <input type="email"
+                                       name="email"
+                                       id="email"
+                                       autoComplete="email" required
+                                       value={email}
+                                       onChange={(e) => setEmail(e.target.value)}
                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"/>
+                                {errors.email && <div className="text-red-500">{errors.email}</div>}
                             </div>
                         </div>
 
@@ -30,9 +56,16 @@ export default function Login() {
                                 </div>
                             </div>
                             <div className="mt-2">
-                                <input type="password" name="password" id="password" autoComplete="current-password"
+                                <input type="password"
+                                       name="password"
+                                       id="password"
+                                       autoComplete="current-password"
                                        required
+                                       value={password}
+                                       onChange={(e) => setPassword(e.target.value)}
                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"/>
+
+                                {errors.password && <div className="text-red-500">{errors.password}</div>}
                             </div>
                         </div>
 
