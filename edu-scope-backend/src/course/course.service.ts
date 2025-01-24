@@ -42,8 +42,10 @@ export class CourseService {
                     data: {
                         title: dto.title,
                         description: dto.description,
-                        createdById: this.request['user'].id,
-                        updatedById: this.request['user'].id,
+                        // createdById: this.request['user'].id,
+                        // updatedById: this.request['user'].id,
+                        createdById: 1,
+                        updatedById: 1
                     }
                 });
             }
@@ -60,6 +62,15 @@ export class CourseService {
                     id: id
                 }
             });
+        } catch (error) {
+            this.logger.error(error)
+            throw new BadRequestException('Something went wrong');
+        }
+    }
+
+    async getAllCourse() {
+        try {
+            return await this.prisma.course.findMany();
         } catch (error) {
             this.logger.error(error)
             throw new BadRequestException('Something went wrong');

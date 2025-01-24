@@ -1,14 +1,14 @@
-import {IsNotEmpty, Max} from "class-validator";
+import {IsNotEmpty, Length, Max, Min} from "class-validator";
 
 export class CourseDto {
 
     id?: number;
 
     @IsNotEmpty()
-    @Max(300)
+    @Length(1, 300)
     title: string;
 
-    @Max(2000)
+    @Length(0, 2000)
     description: string;
 
 }

@@ -16,7 +16,6 @@ const MainLayout = ({children}: Props) => {
 
     const handleRouteClick = (e) => {
         e.preventDefault();
-        updateHeaderName(e.target.dataset.title);
         router.push(e.target.href);
     }
 
