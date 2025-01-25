@@ -7,7 +7,7 @@ export default function Dashboard() {
     const {updateHeaderName} = useHeaderStore();
 
     useEffect(() => {
-        updateHeaderName('Course')
+        updateHeaderName('Dashboard')
     }, []);
 
     return (

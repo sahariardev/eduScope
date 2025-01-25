@@ -8,18 +8,17 @@ export class CourseController {
     constructor(private courseService: CourseService) {
     }
 
-    @Public()
     @Post('save')
     save(@Body() dto: CourseDto) {
         return this.courseService.save(dto);
     }
 
 
-    @Public()
     @Get('all')
     getAllCourse() {
         return this.courseService.getAllCourse();
     }
+
     @Get(':id')
     get(@Param("id") id: number) {
         return this.courseService.getCourse(id);

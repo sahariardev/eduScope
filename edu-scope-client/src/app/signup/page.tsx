@@ -46,7 +46,7 @@ export default function Signup() {
         }
 
         try {
-            const response = await axios.post(url, data);
+            const response = await axios.post(url, data, {withCredentials: true});
             console.log(response);
             router.push('/dashboard');
 

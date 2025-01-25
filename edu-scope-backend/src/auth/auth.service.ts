@@ -29,10 +29,10 @@ export class AuthService {
 
             const token = await this.signToken(user.id, user.email);
 
-            res.cookie('jwt', token, {
+            //todo: update this for prod
+            res.cookie("jwt", token, {
                 httpOnly: true,
-                secure: false,
-                sameSite: 'strict',
+                sameSite: 'lax',
                 maxAge: 24 * 60 * 60 * 1000,
             });
 

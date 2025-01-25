@@ -26,10 +26,8 @@ export default function CourseNew() {
             "description": html
         }
 
-        console.log(data);
-
         try {
-            const response = await axios.post(CREATE_NEW_COURSE_URL, data);
+            const response = await axios.post(CREATE_NEW_COURSE_URL, data, {withCredentials: true});
             console.log(response);
             router.push('/course');
 

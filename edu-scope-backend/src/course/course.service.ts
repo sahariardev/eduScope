@@ -33,7 +33,7 @@ export class CourseService {
                     data: {
                         title: dto.title,
                         description: dto.description,
-                        updatedById: this.request['user'].id,
+                        updatedById: this.request['user'].userId,
                     }
                 })
 
@@ -42,10 +42,8 @@ export class CourseService {
                     data: {
                         title: dto.title,
                         description: dto.description,
-                        // createdById: this.request['user'].id,
-                        // updatedById: this.request['user'].id,
-                        createdById: 1,
-                        updatedById: 1
+                        createdById: this.request['user'].userId,
+                        updatedById: this.request['user'].userId,
                     }
                 });
             }
