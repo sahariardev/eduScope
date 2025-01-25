@@ -8,7 +8,7 @@ export default function NewContent() {
     const {updateHeaderName} = useHeaderStore();
 
     useEffect(() => {
-        updateHeaderName('Content')
+        updateHeaderName('Lesson')
     }, []);
 
     const [html, setHtml] = useState('');
@@ -24,7 +24,7 @@ export default function NewContent() {
                 <form className="space-y-4">
                     <div className="flex items-center space-x-4">
                         <label htmlFor="name" className="w-1/5 font-medium text-gray-700">
-                            Name:
+                            Lesson Title:
                         </label>
                         <input
                             type="text"
@@ -35,6 +35,33 @@ export default function NewContent() {
                             className="w-3/4 px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                             placeholder="Enter Course Name"
                         />
+                    </div>
+                    <div className="flex items-center space-x-4">
+                        <label htmlFor="name" className="w-1/5 font-medium text-gray-700">
+                            Select Course:
+                        </label>
+                        <select
+                            id="options"
+                            className="w-3/4 rounded-md block border border-gray-300 bg-white py-2 px-3 text-sm shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                        >
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                            <option value="option3">Option 3</option>
+                        </select>
+                    </div>
+
+                    <div className="flex items-center space-x-4">
+                        <label htmlFor="name" className="w-1/5 font-medium text-gray-700">
+                            Select Video:
+                        </label>
+                        <select
+                            id="options"
+                            className="w-3/4 rounded-md block border border-gray-300 bg-white py-2 px-3 text-sm shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
+                        >
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                            <option value="option3">Option 3</option>
+                        </select>
                     </div>
 
                     <div className="flex items-center space-x-4">

@@ -46,7 +46,9 @@ export default function Course() {
                         <div className="grid grid-cols-2 p-4 items-center">
                             <div>{course.title}</div>
                             <div className="text-right">
-                                <button className="px-4 py-2 bg-gray-800 text-white text-sm rounded hover:bg-gray-600">
+                                <button
+                                    onClick={() => router.push(`/course/${course.id}`)}
+                                    className="px-4 py-2 bg-gray-800 text-white text-sm rounded hover:bg-gray-600">
                                     Edit
                                 </button>
                             </div>

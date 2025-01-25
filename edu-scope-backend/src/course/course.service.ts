@@ -18,7 +18,7 @@ export class CourseService {
 
                 const course = await this.prisma.course.findFirst({
                     where: {
-                        id: dto.id
+                        id: parseInt(String(dto.id))
                     }
                 });
 
@@ -28,7 +28,7 @@ export class CourseService {
 
                 await this.prisma.course.update({
                     where: {
-                        id: dto.id
+                        id: parseInt(String(dto.id))
                     },
                     data: {
                         title: dto.title,
@@ -57,7 +57,7 @@ export class CourseService {
         try {
             return await this.prisma.course.findFirst({
                 where: {
-                    id: id
+                    id: parseInt(String(id))
                 }
             });
         } catch (error) {

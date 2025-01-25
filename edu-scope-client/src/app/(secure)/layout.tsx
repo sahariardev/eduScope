@@ -44,6 +44,9 @@ const MainLayout = ({children}: Props) => {
                     <a href="/course" className="block px-4 py-2 rounded hover:bg-gray-700" data-title="Courses" onClick={handleRouteClick}>
                         Courses
                     </a>
+                    <a href="/lesson" className="block px-4 py-2 rounded hover:bg-gray-700" data-title="Courses" onClick={handleRouteClick}>
+                        Lessons
+                    </a>
                     <a href="#" className="block px-4 py-2 rounded hover:bg-gray-700" onClick={handleRouteClick}>
                         Settings
                     </a>
