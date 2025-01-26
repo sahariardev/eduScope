@@ -1,5 +1,5 @@
 import {ForbiddenException, Injectable} from '@nestjs/common';
-import {AuthDto} from "./dto";
+import {AuthLoginDto, AuthSignupDto} from "./dto";
 import * as argon2 from "argon2";
 import {PrismaService} from "../prisma/prisma.service";
 import {PrismaClientKnownRequestError} from "@prisma/client/runtime/library";
@@ -15,7 +15,7 @@ export class AuthService {
                 private jwtService: JwtService) {
     }
 
-    async signup(dto: AuthDto, res: Response) {
+    async signup(dto: AuthSignupDto, res: Response) {
         const hashedPassword = await argon2.hash(dto.password);
 
         try {
@@ -50,26 +50,40 @@ export class AuthService {
         }
     }
 
-    async signin(dto: AuthDto) {
-        const user = await this.prisma.user.findUnique({
-            where: {
-                email: dto.email
+    async signin(dto: AuthLoginDto, res: Response) {
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: {
+                    email: dto.email
+                }
+            });
+
+            if (!user) {
+                throw new ForbiddenException('Credentials incorrect')
             }
-        });
 
-        if (!user) {
-            throw new ForbiddenException('Credentials incorrect')
+            const passwordMatched = await argon2.verify(user.password, dto.password);
+
+            if (!passwordMatched) {
+                throw new ForbiddenException('Credentials incorrect')
+            }
+
+            const token = await this.signToken(user.id, user.email);
+
+            //todo: update this for prod
+            res.cookie("jwt", token, {
+                httpOnly: true,
+                sameSite: 'lax',
+                maxAge: 24 * 60 * 60 * 1000,
+            });
+
+            return {
+                access_token: token,
+            };
+        } catch (error) {
+            //todo:log error
+            throw error;
         }
-
-        const passwordMatched = await argon2.verify(user.password, dto.password);
-
-        if (!passwordMatched) {
-            throw new ForbiddenException('Credentials incorrect')
-        }
-
-        return {
-            access_token: await this.signToken(user.id, user.email),
-        };
     }
 
     async signToken(userId: number, email: string) {

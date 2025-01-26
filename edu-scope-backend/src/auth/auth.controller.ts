@@ -1,6 +1,6 @@
 import {Body, Controller, Post, Res} from '@nestjs/common';
 import {AuthService} from "./auth.service";
-import {AuthDto} from "./dto";
+import {AuthLoginDto, AuthSignupDto} from "./dto";
 import {Public} from "../app.utils";
 import { Response } from 'express';
 
@@ -11,13 +11,13 @@ export class AuthController {
 
     @Public()
     @Post('signup')
-    signup(@Body() dto: AuthDto, @Res({ passthrough: true }) res: Response) {
+    signup(@Body() dto: AuthSignupDto, @Res({ passthrough: true }) res: Response) {
         return this.authService.signup(dto, res);
     }
 
     @Public()
     @Post('signin')
-    signin(@Body() dto: AuthDto, @Res() res: Response) {
-        return this.authService.signin(dto);
+    signin(@Body() dto: AuthLoginDto, @Res({ passthrough: true }) res: Response) {
+        return this.authService.signin(dto, res);
     }
 }

@@ -1,9 +1,14 @@
 "use client"
 import Link from "next/link";
 import React, {useState} from "react";
+import axios from "axios";
+import {useRouter} from "next/navigation";
 
 export default function Login() {
 
+    const router = useRouter();
+
+    const [globalError, setGlobalError] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState<{ email: string, password: string }>({
@@ -11,14 +16,29 @@ export default function Login() {
         password: ""
     })
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrors({
             email: "",
             password: ""
         });
 
-        //send ajax request
+        const url = 'http://localhost:8080/auth/signin';
+
+        const data = {
+            "email": email,
+            "password": password
+        }
+
+        try {
+            const response = await axios.post(url, data, {withCredentials: true});
+            console.log(response);
+            router.push('/dashboard');
+
+        } catch (error) {
+            console.log(error)
+            setGlobalError(error.response.data.message.join(', '))
+        }
     }
 
     return (
