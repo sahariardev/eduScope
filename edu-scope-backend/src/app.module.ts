@@ -9,6 +9,7 @@ import { SqsModule } from './sqs/sqs.module';
 import {ScheduleModule} from "@nestjs/schedule";
 import { TranscoderModule } from './transcoder/transcoder.module';
 import { CourseModule } from './course/course.module';
+import { LessonModule } from './lesson/lesson.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { CourseModule } from './course/course.module';
         SqsModule,
         TranscoderModule,
         CourseModule,
+        LessonModule,
     ],
 })
 export class AppModule {
