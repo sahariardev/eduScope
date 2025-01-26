@@ -49,6 +49,7 @@ model Course {
 
 model Lesson {
   id          Int      @id @default(autoincrement())
+  title       String
   course      Course   @relation(fields: [courseId], references: [id])
   courseId    Int
   video       Video?   @relation(fields: [videoId], references: [id])

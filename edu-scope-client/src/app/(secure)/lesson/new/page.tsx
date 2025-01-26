@@ -1,21 +1,58 @@
 'use client'
 import {useHeaderStore} from "@/app/hooks/useHeaderStore";
 import {useEffect, useState} from "react";
-import {BtnBold, BtnItalic, DefaultEditor, Editor, EditorProvider, Toolbar} from "react-simple-wysiwyg";
+import {DefaultEditor} from "react-simple-wysiwyg";
+import axios from "axios";
+import {CREATE_NEW_LESSON_URL, GET_ALL_COURSE_URL} from "@/app/constant";
+import {useRouter} from "next/navigation";
 
 export default function NewContent() {
 
     const {updateHeaderName} = useHeaderStore();
+    const router = useRouter();
 
     useEffect(() => {
         updateHeaderName('Lesson')
     }, []);
 
     const [html, setHtml] = useState('');
-    const [name, setName] = useState('');
+    const [title, setTitle] = useState('');
+    const [videoId, setVideoId] = useState('');
+    const [courseId, setCourseId] = useState('');
+    const [courseList, setCourseList] = useState([]);
+    const [globalError, setGlobalError] = useState('');
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(GET_ALL_COURSE_URL, {withCredentials: true});
+                setCourseList(response.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
 
+        fetchData();
+    }, []);
+
+    const handleSubmit = async (e) => {
+        const data = {
+            description: html,
+            title: title,
+            videoId: videoId,
+            courseId: courseId
+        }
+        console.log(data);
+
+        try {
+            const response = await axios.post(CREATE_NEW_LESSON_URL, data, {withCredentials: true});
+            console.log(response);
+            router.push('/lesson');
+
+        } catch (error) {
+            console.log(error)
+            setGlobalError(error.response.data.message.join(', '))
+        }
     }
 
     return (
@@ -29,33 +66,38 @@ export default function NewContent() {
                         <input
                             type="text"
                             id="name"
-                            value={name}
+                            value={title}
                             name="name"
-                            onChange={e => setName(e.target.value)}
+                            onChange={e => setTitle(e.target.value)}
                             className="w-3/4 px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                             placeholder="Enter Course Name"
                         />
                     </div>
+
                     <div className="flex items-center space-x-4">
-                        <label htmlFor="name" className="w-1/5 font-medium text-gray-700">
+                        <label htmlFor="course" className="w-1/5 font-medium text-gray-700">
                             Select Course:
                         </label>
                         <select
-                            id="options"
+                            id="course"
+                            value={courseId}
+                            onChange={e => setCourseId(e.target.value)}
                             className="w-3/4 rounded-md block border border-gray-300 bg-white py-2 px-3 text-sm shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                         >
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
+                            <option >Please Select</option>
+                            {courseList.map(course => <option value={course.id}
+                                                              key={course.id}>{course.title}</option>)}
                         </select>
                     </div>
 
                     <div className="flex items-center space-x-4">
-                        <label htmlFor="name" className="w-1/5 font-medium text-gray-700">
+                        <label htmlFor="video" className="w-1/5 font-medium text-gray-700">
                             Select Video:
                         </label>
                         <select
-                            id="options"
+                            id="video"
+                            value={videoId}
+                            onChange={e => setVideoId(e.target.value)}
                             className="w-3/4 rounded-md block border border-gray-300 bg-white py-2 px-3 text-sm shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                         >
                             <option value="option1">Option 1</option>

@@ -32,16 +32,16 @@ export class LessonService {
                         title: dto.title,
                         text: dto.description,
                         updatedById: this.request['user'].userId,
-                        videoId: dto.videId,
-                        courseId: dto.courseId,
+                        videoId: parseInt(String(dto.videId)),
+                        courseId: parseInt(String(dto.courseId)),
                     }
                 })
             } else {
                 return await this.prisma.lesson.create({
                     data: {
                         title: dto.title,
-                        videoId: dto.videId,
-                        courseId: dto.courseId,
+                        videoId: parseInt(String(dto.videId)),
+                        courseId: parseInt(String(dto.courseId)),
                         text: dto.description,
                         createdById: this.request['user'].userId,
                         updatedById: this.request['user'].userId,
@@ -59,6 +59,9 @@ export class LessonService {
             return await this.prisma.lesson.findFirst({
                 where: {
                     id: parseInt(String(id))
+                },
+                include: {
+                    course: true
                 }
             });
         } catch (error) {
@@ -69,7 +72,11 @@ export class LessonService {
 
     async getAllLesson() {
         try {
-            return await this.prisma.lesson.findMany();
+            return await this.prisma.lesson.findMany({
+                include: {
+                    course: true
+                }
+            });
         } catch (error) {
             this.logger.error(error)
             throw new BadRequestException('Something went wrong');
