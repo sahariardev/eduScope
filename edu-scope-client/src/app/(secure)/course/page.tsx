@@ -23,7 +23,6 @@ export default function Course() {
         const fetchData = async () => {
             try {
                 const response = await axios.get(GET_ALL_COURSE_URL, {withCredentials: true});
-                console.log(response.data); // Handle the data as needed
                 setCourseList(response.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
