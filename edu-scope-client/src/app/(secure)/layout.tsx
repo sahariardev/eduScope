@@ -4,6 +4,7 @@ import Link from "next/link";
 import {useHeaderStore} from "@/app/hooks/useHeaderStore";
 import {useRouter} from "next/navigation";
 import PageTitle from "@/app/components/pageTitle";
+import {useNavbarStore} from "@/app/hooks/useNavbarStore";
 
 interface Props {
     children: ReactNode;
@@ -11,16 +12,10 @@ interface Props {
 
 const MainLayout = ({children}: Props) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const {headerName, updateHeaderName} = useHeaderStore();
-    const router = useRouter();
-
-    const handleRouteClick = (e) => {
-        e.preventDefault();
-        router.push(e.target.href);
-    }
+    const {navbarUrls} = useNavbarStore();
 
     return (
-        <div className="flex h-screen">
+        <div className="flex h-screen ">
             <button
                 className="md:hidden p-4 bg-gray-800 text-gray-100"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -37,22 +32,15 @@ const MainLayout = ({children}: Props) => {
                     EduScope
                 </div>
                 <nav className="flex-grow p-4 space-y-4">
-                    <a href="/dashboard" className="block px-4 py-2 rounded hover:bg-gray-700" data-title="Dashboard"
-                       onClick={handleRouteClick}>
-                        Dashboard
-                    </a>
-                    <a href="/course" className="block px-4 py-2 rounded hover:bg-gray-700" data-title="Courses" onClick={handleRouteClick}>
-                        Courses
-                    </a>
-                    <a href="/lesson" className="block px-4 py-2 rounded hover:bg-gray-700" data-title="Courses" onClick={handleRouteClick}>
-                        Lessons
-                    </a>
-                    <a href="#" className="block px-4 py-2 rounded hover:bg-gray-700" onClick={handleRouteClick}>
-                        Settings
-                    </a>
-                    <a href="#" className="block px-4 py-2 rounded hover:bg-gray-700" onClick={handleRouteClick}>
-                        Profile
-                    </a>
+
+                    {navbarUrls.map(navbar => {
+                        return (
+                            <Link href={navbar.href} key={navbar.href} className="block px-4 py-2 rounded hover:bg-gray-700" data-title="Dashboard"
+                            >
+                                {navbar.title}
+                            </Link>
+                        );
+                    })}
                 </nav>
                 <div className="p-4 border-t border-gray-700">
                     <button className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 rounded">
