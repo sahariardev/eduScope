@@ -58,6 +58,9 @@ export class CourseService {
             return await this.prisma.course.findFirst({
                 where: {
                     id: parseInt(String(id))
+                },
+                include: {
+                    lessons: true
                 }
             });
         } catch (error) {
