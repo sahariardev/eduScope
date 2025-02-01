@@ -1,9 +1,13 @@
-
+'use client'
+import {useCourseInfoStore} from "@/app/hooks/useCourseInfoStore";
 
 export default function ViewCourse() {
+
+    const {currentCourse} = useCourseInfoStore();
+
     return (
         <div>
-            Hello World
+            {currentCourse.description}
         </div>
     )
 }

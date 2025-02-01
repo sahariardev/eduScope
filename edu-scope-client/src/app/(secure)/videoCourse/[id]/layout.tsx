@@ -7,12 +7,14 @@ import PageTitle from "@/app/components/pageTitle";
 import axios from "axios";
 import {GET_ONE_COURSE_URL} from "@/app/constant";
 import {useNavbarStore} from "@/app/hooks/useNavbarStore";
+import {useCourseInfoStore} from "@/app/hooks/useCourseInfoStore";
 
 
 const CourseLayout = ({children, params}) => {
     const resolvedParams = React.use(params);
     const {updateHeaderName} = useHeaderStore();
     const {updateNavbarList} = useNavbarStore();
+    const {updateCurrentCourse} = useCourseInfoStore();
 
     useEffect(() => {
         updateHeaderName('Course')
@@ -25,6 +27,7 @@ const CourseLayout = ({children, params}) => {
             const course = response.data;
 
             updateHeaderName(course.title);
+            updateCurrentCourse(course);
             updateNavbarList(course.lessons.map(lesson => {
                 return {
                     href: `/videoCourse/${resolvedParams.id}/lesson/${lesson.id}`,
@@ -39,7 +42,7 @@ const CourseLayout = ({children, params}) => {
 
     return (
        <div>
-
+           {children}
        </div>
     );
 }

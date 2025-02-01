@@ -1,6 +1,6 @@
 # 📺 Video Course Platform
 
-This repository contains a highly scalable 🎥 course platform that leverages modern 🔧 technologies to provide video streaming in 🎥 HLS format. The platform includes both an 🔨 admin panel for course management and a user-facing interface for consuming 📝 content.
+This repository contains a highly scalable  course platform that leverages modern 🔧 technologies to provide video streaming in  HLS format. The platform includes both an 🔨 admin panel for course management and a user-facing interface for consuming  content.
 
 ## 🔬 Tech Stack
 

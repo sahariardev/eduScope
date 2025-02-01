@@ -1,19 +1,16 @@
+'use client'
+
 import {useHeaderStore} from "@/app/hooks/useHeaderStore";
 import {useRouter} from "next/navigation";
 import React, {useEffect, useState} from "react";
-import axios from "axios/index";
+import axios from "axios";
 import {GET_ALL_COURSE_URL, GET_ONE_LESSON_URL} from "@/app/constant";
 
 export default function LessonView({params}) {
 
-
     const {updateHeaderName} = useHeaderStore();
     const router = useRouter();
     const resolvedParams = React.use(params);
-
-    useEffect(() => {
-        updateHeaderName('Lesson')
-    }, []);
 
     const [html, setHtml] = useState('');
     const [title, setTitle] = useState('');
@@ -25,11 +22,14 @@ export default function LessonView({params}) {
     useEffect(() => {
         const fetchLessonData = async () => {
             try {
-                const response = await axios.get(GET_ONE_LESSON_URL + resolvedParams.id, {withCredentials: true});
+                const response = await axios.get(GET_ONE_LESSON_URL + resolvedParams.lessonId, {withCredentials: true});
+                const lesson = response.data;
                 setTitle(response.data.title)
                 setHtml(response.data.text)
                 setVideoId(response.data.videoId || '')
-                setCourseId(response.data.courseId)
+                setCourseId(response.data.courseId);
+
+                updateHeaderName(`${lesson.title}`)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -39,7 +39,17 @@ export default function LessonView({params}) {
     }, []);
     return (
         <div>
-            Hello World
+            <div>
+                {html}
+            </div>
+            {
+                videoId && (
+                    <div>
+                        {/*vide player*/}
+                    </div>
+                )
+            }
+
         </div>
     )
 }
