@@ -10,6 +10,9 @@ import {ScheduleModule} from "@nestjs/schedule";
 import { TranscoderModule } from './transcoder/transcoder.module';
 import { CourseModule } from './course/course.module';
 import { LessonModule } from './lesson/lesson.module';
+import { ProgressModule } from './progress/progress.module';
+import { ServiceModule } from './service/service.module';
+import { ProgrssService } from './progrss/progrss.service';
 
 @Module({
     imports: [
@@ -30,7 +33,10 @@ import { LessonModule } from './lesson/lesson.module';
         TranscoderModule,
         CourseModule,
         LessonModule,
+        ProgressModule,
+        ServiceModule,
     ],
+    providers: [ProgrssService],
 })
 export class AppModule {
 }

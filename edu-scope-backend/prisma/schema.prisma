@@ -27,6 +27,7 @@ model User {
   updatedLessons Lesson[]     @relation("UpdatedLessons")
   videosUploaded Video[]
   enrollments    Enrollment[]
+  UserProgress   UserProgress[]
 
   @@map("users")
 }
@@ -61,8 +62,10 @@ model Lesson {
   createdBy   User     @relation("CreatedLessons", fields: [createdById], references: [id])
   updatedById Int
   updatedBy   User     @relation("UpdatedLessons", fields: [updatedById], references: [id])
+  UserProgress UserProgress[]
 
   @@map("lessons")
+  
 }
 
 model Video {
@@ -88,4 +91,15 @@ model Enrollment {
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@id([userId, courseId])
+}
+
+model UserProgress {
+  userId     Int
+  lessonId Int
+  completedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@id([userId,   lessonId])
 }
