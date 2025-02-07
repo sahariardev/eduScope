@@ -162,7 +162,7 @@ This repository contains a highly scalable  course platform that leverages moder
 
 ## 📚 Contributing
 
-We welcome 🌐 contributions! Please submit a 📋 pull request or open an issue for discussion.
+We welcome 🌐 contributions! Please submit a  pull request or open an issue for discussion.
 
 ---
 

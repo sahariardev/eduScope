@@ -61,7 +61,12 @@ export class LessonService {
                     id: parseInt(String(id))
                 },
                 include: {
-                    course: true
+                    course: true,
+                    UserProgress: {
+                        where: {
+                            userId: this.request['user'].userId
+                        }
+                    }
                 }
             });
         } catch (error) {

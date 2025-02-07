@@ -11,8 +11,6 @@ import { TranscoderModule } from './transcoder/transcoder.module';
 import { CourseModule } from './course/course.module';
 import { LessonModule } from './lesson/lesson.module';
 import { ProgressModule } from './progress/progress.module';
-import { ServiceModule } from './service/service.module';
-import { ProgrssService } from './progrss/progrss.service';
 
 @Module({
     imports: [
@@ -34,9 +32,8 @@ import { ProgrssService } from './progrss/progrss.service';
         CourseModule,
         LessonModule,
         ProgressModule,
-        ServiceModule,
     ],
-    providers: [ProgrssService],
+    providers: [],
 })
 export class AppModule {
 }

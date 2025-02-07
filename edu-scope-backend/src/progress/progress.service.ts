@@ -22,8 +22,8 @@ export class ProgressService {
                 }
             });
         } catch (error) {
-            this.logger.error(error)
-            throw new BadRequestException('Something went wrong');
+            this.logger.error(error);
+            this.remove(lessonId);
         }
     }
 

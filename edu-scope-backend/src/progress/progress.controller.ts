@@ -13,9 +13,5 @@ export class ProgressController {
         return this.progressService.save(lessonId);    
     }
 
-    @Post('save/:lessonId')
-    delete(@Param("lessonId") lessonId: number) {
-        return this.progressService.remove(lessonId);    
-    }
 
 }
