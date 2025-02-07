@@ -70,10 +70,11 @@ model Lesson {
 
 model Video {
   id          Int      @id @default(autoincrement())
-  title       String
+  title       String @unique
   link        String?
   key         String
   lesson      Lesson?
+  processed   Boolean @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   createdById Int

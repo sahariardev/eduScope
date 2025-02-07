@@ -13,10 +13,7 @@ const UploadForm = () => {
 
     const handleFileUpload = async (file) => {
         try {
-
-            const formData = new FormData();
-            formData.append('fileName', file.name);
-            const initializeRes = await axios.post('http://localhost:8080/video/initialize', {fileName: file.name});
+            const initializeRes = await axios.post('http://localhost:8080/video/initialize', {fileName: file.name, title: 'Test Title'});
 
             const {uploadId} = initializeRes.data;
             console.log('Upload ID is', uploadId);
@@ -65,6 +62,7 @@ const UploadForm = () => {
 
             const completeRes = await axios.post('http://localhost:8080/video/completeUpload', {
                 fileName: file.name,
+                title: 'Test Title',
                 totalChunks: totalchunks,
                 uploadId: uploadId,
                 etags: JSON.stringify(etags)

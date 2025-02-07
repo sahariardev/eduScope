@@ -8,6 +8,7 @@ import {TranscoderService} from "../transcoder/transcoder.service";
 export class SqsService implements OnModuleInit {
 
     private readonly logger = new Logger(SqsService.name);
+    private isRunning = false;
 
     private readonly sqs: AWS.SQS;
 
@@ -41,6 +42,12 @@ export class SqsService implements OnModuleInit {
 
     @Cron(CronExpression.EVERY_30_SECONDS)
     async receiveMessages(): Promise<void> {
+        if (this.isRunning) {
+            this.logger.warn('Previous job is still running, skipping this run.');
+            return; // Skip execution
+          }
+         
+          this.isRunning = true;
         const params = {
             QueueUrl: this.config.get('AWS_SQS_URL'),
             MaxNumberOfMessages: 10,
@@ -56,6 +63,7 @@ export class SqsService implements OnModuleInit {
                     const processDone = await this.transcoderService.convertToHlsFormat(JSON.parse(message.Body).key);
 
                     if (processDone) {
+                        console.log('Deleting message');
                         await this.deleteMessage(message.ReceiptHandle);
                     }
                 }
@@ -64,8 +72,12 @@ export class SqsService implements OnModuleInit {
             }
         } catch (error) {
             this.logger.error('Error receiving messages:', error);
+        } finally {
+            this.isRunning = false;
         }
+
     }
+
     private async deleteMessage(receiptHandle: string): Promise<void> {
         const params = {
             QueueUrl: this.config.get('AWS_SQS_URL'),

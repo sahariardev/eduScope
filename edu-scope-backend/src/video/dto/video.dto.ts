@@ -3,6 +3,9 @@ import {IsNotEmpty, IsString} from "class-validator";
 export class VideoUploadInitializeDto {
     @IsNotEmpty()
     fileName: string;
+
+    @IsNotEmpty()
+    title: string;
 }
 
 export class VideoChunkUploadDto {
@@ -19,6 +22,9 @@ export class VideoChunkUploadDto {
 }
 
 export class VideoUploadCompleteDto {
+    @IsNotEmpty()
+    title: string;
+    
     @IsNotEmpty()
     @IsString()
     fileName: string;

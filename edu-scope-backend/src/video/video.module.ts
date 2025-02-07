@@ -1,15 +1,14 @@
 import {Module} from '@nestjs/common';
 import {VideoController} from './video.controller';
 import {VideoService} from './video.service';
-import {SqsModule} from "../sqs/sqs.module";
-import {SqsService} from "../sqs/sqs.service";
 import {TranscoderModule} from "../transcoder/transcoder.module";
 import {TranscoderService} from "../transcoder/transcoder.service";
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
-    imports: [SqsModule, TranscoderModule],
+    imports: [TranscoderModule],
     controllers: [VideoController],
-    providers: [VideoService, SqsService, TranscoderService]
+    providers: [VideoService, TranscoderService, PrismaService]
 })
 export class VideoModule {
 }

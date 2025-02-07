@@ -1,5 +1,6 @@
-import {Injectable, Logger} from '@nestjs/common';
+import {BadRequestException, Injectable, Logger, Inject} from '@nestjs/common';
 import {ConfigService} from "@nestjs/config";
+import {PrismaService} from "../prisma/prisma.service";
 import {VideoChunkUploadDto, VideoUploadCompleteDto, VideoUploadInitializeDto} from "./dto";
 import {
     CompleteMultipartUploadCommand,
@@ -9,17 +10,30 @@ import {
 } from "@aws-sdk/client-s3";
 import {NodeHttpHandler} from "@aws-sdk/node-http-handler";
 import {SqsService} from "../sqs/sqs.service";
+import {REQUEST} from "@nestjs/core";
 
 @Injectable()
 export class VideoService {
 
     private readonly logger = new Logger(VideoService.name);
 
-    constructor(private configService: ConfigService, private sqsService: SqsService) {
+    constructor(private configService: ConfigService, 
+        @Inject(REQUEST) private readonly request: Request,
+        private prismService: PrismaService,
+        private sqsService: SqsService) {
     }
 
     async initializeUpload(dto: VideoUploadInitializeDto) {
         try {
+
+            if (await this.videoTitleAlreadyExist(dto.title)) {
+                throw new BadRequestException("Title already exist");
+            }
+
+            if (await this.videoFileNameAlreadyExist(dto.fileName)) {
+                throw new BadRequestException("File name already exist");
+            }
+
             this.logger.log('Initializing upload');
             const filename = dto.fileName;
             const s3Client = new S3Client({
@@ -66,14 +80,14 @@ export class VideoService {
             );
 
             const bucketName = this.configService.get('AWS_VIDEO_UPLOAD_BUCKET');
-            const partNumber = dto.chunkIndex + 1;
+            const partNumber = parseInt(String(dto.chunkIndex)) + 1;
 
 
             const params = {
                 Bucket: bucketName,
                 Key: dto.fileName,
                 UploadId: dto.uploadId,
-                PartNumber: dto.chunkIndex + 1,
+                PartNumber: partNumber,
                 Body: file.buffer
             }
 
@@ -129,16 +143,47 @@ export class VideoService {
             // noinspection TypeScriptUnresolvedReference
             const location = completeRes.Location;
 
-            //send this data to database
-            //send this data to sqs
             this.sqsService.sendMessage({key, location});
             console.log("recievied", this.sqsService.receiveMessages());
+            
+            await this.saveVideoToDatabase(dto);
+
             return {message: "Uploaded successfully"}
 
         } catch (error) {
             this.logger.error(error);
             return {message: 'Upload failed'};
         }
+    }
+
+    async videoTitleAlreadyExist(title: string) {
+        const video = await this.prismService.video.findFirst({
+            where: {
+                title: title
+            }
+        });
+
+        return video !== null
+    }
+
+    async videoFileNameAlreadyExist(fileName: string) {
+        const video = await this.prismService.video.findFirst({
+            where: {
+                key: fileName
+            }
+        });
+
+        return video !== null
+    }
+
+    async saveVideoToDatabase(dto: VideoUploadCompleteDto) {
+        await this.prismService.video.create({
+            data:{
+                title: dto.title,
+                key: dto.fileName,
+                createdById: 1
+            }
+        });
     }
 
 }
