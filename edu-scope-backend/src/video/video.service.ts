@@ -156,6 +156,10 @@ export class VideoService {
         }
     }
 
+    async getAll() {
+        return this.prismService.video.findMany();
+    }   
+
     async videoTitleAlreadyExist(title: string) {
         const video = await this.prismService.video.findFirst({
             where: {

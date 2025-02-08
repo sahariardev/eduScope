@@ -8,3 +8,5 @@ export const GET_ALL_LESSON_URL = `${BASE_URL}/lesson/all`;
 export const GET_ONE_LESSON_URL = `${BASE_URL}/lesson/`;
 
 export const MARK_AS_COMELETED_URL = `${BASE_URL}/progress/save/`;
+
+export const GET_ALL_VIDEO_URL = `${BASE_URL}/video/all`;

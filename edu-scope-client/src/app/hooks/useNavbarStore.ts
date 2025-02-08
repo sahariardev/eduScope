@@ -13,6 +13,10 @@ export const useNavbarStore = create((set) => ({
         {
             href: '/lesson',
             title: 'Lesson'
+        },
+        {
+            href: '/video',
+            title: 'Video'
         }
     ],
     updateNavbarList: (urls) => set({navbarUrls: urls})
