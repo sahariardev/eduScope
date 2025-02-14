@@ -24,8 +24,6 @@ export class LessonService {
                     throw new BadRequestException('Invalid lesson id');
                 }
 
-                console.log(dto);
-
                 await this.prisma.lesson.update({
                     where: {
                         id: parseInt(String(dto.id))

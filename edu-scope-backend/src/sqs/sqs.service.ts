@@ -60,11 +60,12 @@ export class SqsService implements OnModuleInit {
                 for (const message of result.Messages) {
                     this.logger.log('Received message:', message.Body);
 
-                    const processDone = await this.transcoderService.convertToHlsFormat(JSON.parse(message.Body).key);
-                     
-                    // const processDone = true;
+                    const messageBody = JSON.parse(message.Body);
+
+                    const processDone = await this.transcoderService.convertToHlsFormat(messageBody.key, parseInt(String(messageBody.id)));
+
                     if (processDone) {
-                        console.log('Deleting message');
+                        this.logger.log('Message deleted');
                         await this.deleteMessage(message.ReceiptHandle);
                     }
                 }

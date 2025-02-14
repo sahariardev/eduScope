@@ -143,10 +143,12 @@ export class VideoService {
             // noinspection TypeScriptUnresolvedReference
             const location = completeRes.Location;
 
-            this.sqsService.sendMessage({key, location});
-            console.log("recievied", this.sqsService.receiveMessages());
             
-            await this.saveVideoToDatabase(dto);
+            const videoData = await this.saveVideoToDatabase(dto);
+
+            this.sqsService.sendMessage({key, location, id: videoData.id});
+            console.log("recievied", this.sqsService.receiveMessages());
+        
 
             return {message: "Uploaded successfully"}
 
@@ -181,7 +183,7 @@ export class VideoService {
     }
 
     async saveVideoToDatabase(dto: VideoUploadCompleteDto) {
-        await this.prismService.video.create({
+        return await this.prismService.video.create({
             data:{
                 title: dto.title,
                 key: dto.fileName,

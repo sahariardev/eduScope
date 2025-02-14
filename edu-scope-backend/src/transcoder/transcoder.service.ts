@@ -5,6 +5,7 @@ import * as fluentFfmpeg from "fluent-ffmpeg";
 import * as ffmpegStatic from "@ffmpeg-installer/ffmpeg";
 import * as fs from "fs";
 import * as path from "path";
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TranscoderService {
@@ -33,7 +34,7 @@ export class TranscoderService {
         },
     ];
 
-    constructor(private config: ConfigService) {
+    constructor(private config: ConfigService, private prisma: PrismaService) {
         this.s3 = new AWS.S3({
             region: 'us-east-1', // Replace with your AWS region
             accessKeyId: this.config.get('AWS_ACCESS_KEY_ID'),
@@ -45,7 +46,7 @@ export class TranscoderService {
         fluentFfmpeg.setFfmpegPath(ffmpegStatic.path);
     }
 
-    async convertToHlsFormat(key: string) {
+    async convertToHlsFormat(key: string, id: number) {
 
         try {
             const writeStream = fs.createWriteStream('local.mp4');
@@ -133,7 +134,7 @@ export class TranscoderService {
                 fs.unlinkSync(filePath);
             }
 
-            //mark processed in database
+            this.makeVideoAsProcessed(id);
 
             return true;
         } catch (error) {
@@ -142,7 +143,14 @@ export class TranscoderService {
         }
     }
 
-    escapeFilename(filename) {
-        return filename.replace(/ /g, '\\ ');
+    async makeVideoAsProcessed(id: number) {
+        await this.prisma.video.update({
+            where: {
+                id: parseInt(String(id))
+            },
+            data: {
+                processed: true
+            }
+        })
     }
 }
