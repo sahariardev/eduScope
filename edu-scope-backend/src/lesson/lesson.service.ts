@@ -24,6 +24,8 @@ export class LessonService {
                     throw new BadRequestException('Invalid lesson id');
                 }
 
+                console.log(dto);
+
                 await this.prisma.lesson.update({
                     where: {
                         id: parseInt(String(dto.id))
@@ -32,7 +34,7 @@ export class LessonService {
                         title: dto.title,
                         text: dto.description,
                         updatedById: this.request['user'].userId,
-                        videoId: parseInt(String(dto.videId)),
+                        videoId: parseInt(String(dto.videoId)),
                         courseId: parseInt(String(dto.courseId)),
                     }
                 })
@@ -40,7 +42,7 @@ export class LessonService {
                 return await this.prisma.lesson.create({
                     data: {
                         title: dto.title,
-                        videoId: parseInt(String(dto.videId)),
+                        videoId: parseInt(String(dto.videoId)),
                         courseId: parseInt(String(dto.courseId)),
                         text: dto.description,
                         createdById: this.request['user'].userId,

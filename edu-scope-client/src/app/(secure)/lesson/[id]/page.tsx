@@ -3,7 +3,10 @@ import {useHeaderStore} from "@/app/hooks/useHeaderStore";
 import React, {useEffect, useState} from "react";
 import {DefaultEditor} from "react-simple-wysiwyg";
 import axios from "axios";
-import {CREATE_NEW_LESSON_URL, GET_ALL_COURSE_URL, GET_ONE_LESSON_URL} from "@/app/constant";
+import {CREATE_NEW_LESSON_URL,
+     GET_ALL_COURSE_URL, 
+     GET_ONE_LESSON_URL, 
+     VIDEO_GET_ALL_URL} from "@/app/constant";
 import {useRouter} from "next/navigation";
 
 export default function EditLesson({params}) {
@@ -21,6 +24,7 @@ export default function EditLesson({params}) {
     const [videoId, setVideoId] = useState('');
     const [courseId, setCourseId] = useState('');
     const [courseList, setCourseList] = useState([]);
+    const [videoList, setVideoList] = useState([]);
     const [globalError, setGlobalError] = useState('');
 
     useEffect(() => {
@@ -34,6 +38,17 @@ export default function EditLesson({params}) {
         };
 
         fetchData();
+
+        const fetchVideoData = async () => {
+            try {
+                const response = await axios.get(VIDEO_GET_ALL_URL, {withCredentials: true});
+                setVideoList(response.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchVideoData();
 
         const fetchLessonData = async () => {
             try {
@@ -64,7 +79,7 @@ export default function EditLesson({params}) {
             router.push('/lesson');
 
         } catch (error) {
-            setGlobalError(error.response.data.message.join(', '))
+            setGlobalError(error.response.data.message)
         }
     }
 
@@ -113,9 +128,9 @@ export default function EditLesson({params}) {
                             onChange={e => setVideoId(e.target.value)}
                             className="w-3/4 rounded-md block border border-gray-300 bg-white py-2 px-3 text-sm shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                         >
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
+                            <option>Please Select</option>
+                            {videoList.map(video => <option value={video.id}
+                                                              key={video.id}>{video.title}</option>)}
                         </select>
                     </div>
 

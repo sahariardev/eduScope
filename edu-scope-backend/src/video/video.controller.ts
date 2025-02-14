@@ -27,6 +27,7 @@ export class VideoController {
         return this.videoService.completeUpload(dto)
     }
 
+
     @Get('all')
     getAll() {
         return this.videoService.getAll();  

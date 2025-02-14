@@ -11,7 +11,7 @@ export class LessonDto {
     @IsNotEmpty()
     courseId: number;
 
-    videId?: number;
+    videoId?: number;
 
     @Length(0, 2000)
     description: string;

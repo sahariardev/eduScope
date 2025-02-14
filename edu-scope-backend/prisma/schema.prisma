@@ -54,7 +54,7 @@ model Lesson {
   course      Course   @relation(fields: [courseId], references: [id])
   courseId    Int
   video       Video?   @relation(fields: [videoId], references: [id])
-  videoId     Int?     @unique
+  videoId     Int? 
   text        String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -73,7 +73,7 @@ model Video {
   title       String @unique
   link        String?
   key         String
-  lesson      Lesson?
+  lesson      Lesson[]
   processed   Boolean @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

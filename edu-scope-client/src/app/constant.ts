@@ -10,3 +10,10 @@ export const GET_ONE_LESSON_URL = `${BASE_URL}/lesson/`;
 export const MARK_AS_COMELETED_URL = `${BASE_URL}/progress/save/`;
 
 export const GET_ALL_VIDEO_URL = `${BASE_URL}/video/all`;
+
+export const VIDEO_UPLOAD_INITIALIZE_URL = `${BASE_URL}/video/initialize`;
+export const VIDEO_UPLOAD_CHUNK_URL = `${BASE_URL}/video/uploadChunk`;
+export const VIDEO_UPLOAD_COMPLETE_URL = `${BASE_URL}/video/completeUpload`;
+
+
+export const VIDEO_GET_ALL_URL = `${BASE_URL}/video/all`;

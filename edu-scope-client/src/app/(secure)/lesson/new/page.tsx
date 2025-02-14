@@ -3,7 +3,7 @@ import {useHeaderStore} from "@/app/hooks/useHeaderStore";
 import {useEffect, useState} from "react";
 import {DefaultEditor} from "react-simple-wysiwyg";
 import axios from "axios";
-import {CREATE_NEW_LESSON_URL, GET_ALL_COURSE_URL} from "@/app/constant";
+import {CREATE_NEW_LESSON_URL, GET_ALL_COURSE_URL, VIDEO_GET_ALL_URL} from "@/app/constant";
 import {useRouter} from "next/navigation";
 
 export default function NewContent() {
@@ -20,6 +20,7 @@ export default function NewContent() {
     const [videoId, setVideoId] = useState('');
     const [courseId, setCourseId] = useState('');
     const [courseList, setCourseList] = useState([]);
+    const [videoList, setVideoList] = useState([]);
     const [globalError, setGlobalError] = useState('');
 
     useEffect(() => {
@@ -33,6 +34,17 @@ export default function NewContent() {
         };
 
         fetchData();
+
+        const fetchVideoData = async () => {
+            try {
+                const response = await axios.get(VIDEO_GET_ALL_URL, {withCredentials: true});
+                setVideoList(response.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchVideoData();
     }, []);
 
     const handleSubmit = async (e) => {
@@ -50,14 +62,14 @@ export default function NewContent() {
             router.push('/lesson');
 
         } catch (error) {
-            console.log(error)
-            setGlobalError(error.response.data.message.join(', '))
+            setGlobalError(error.response.data.message)
         }
     }
 
     return (
         <div>
             <div className="max-w-4xl mx-auto mt-8 bg-white rounded-lg p-4">
+                {globalError && <span>{globalError}</span>}
                 <form className="space-y-4">
                     <div className="flex items-center space-x-4">
                         <label htmlFor="name" className="w-1/5 font-medium text-gray-700">
@@ -100,9 +112,9 @@ export default function NewContent() {
                             onChange={e => setVideoId(e.target.value)}
                             className="w-3/4 rounded-md block border border-gray-300 bg-white py-2 px-3 text-sm shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                         >
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
+                            <option>Please Select</option>
+                            {videoList.map(video => <option value={video.id}
+                                                              key={video.id}>{video.title}</option>)}
                         </select>
                     </div>
 

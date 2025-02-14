@@ -133,10 +133,16 @@ export class TranscoderService {
                 fs.unlinkSync(filePath);
             }
 
+            //mark processed in database
+
             return true;
         } catch (error) {
             this.logger.error(error);
             return false;
         }
+    }
+
+    escapeFilename(filename) {
+        return filename.replace(/ /g, '\\ ');
     }
 }
