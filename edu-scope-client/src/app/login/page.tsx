@@ -3,11 +3,10 @@ import Link from "next/link";
 import React, {useState} from "react";
 import axios from "axios";
 import {useRouter} from "next/navigation";
+import {SIGNIN_URL} from "@/app/constant";
 
 export default function Login() {
-
     const router = useRouter();
-
     const [globalError, setGlobalError] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -23,20 +22,16 @@ export default function Login() {
             password: ""
         });
 
-        const url = 'http://localhost:8080/auth/signin';
-
         const data = {
             "email": email,
             "password": password
         }
 
         try {
-            const response = await axios.post(url, data, {withCredentials: true});
-            console.log(response);
+            await axios.post(SIGNIN_URL, data, {withCredentials: true});
             router.push('/dashboard');
 
         } catch (error) {
-            console.log(error)
             setGlobalError(error.response.data.message.join(', '))
         }
     }
@@ -70,10 +65,6 @@ export default function Login() {
                             <div className="flex items-center justify-between">
                                 <label htmlFor="password"
                                        className="block text-sm/6 font-medium text-gray-900">Password</label>
-                                <div className="text-sm">
-                                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">Forgot
-                                        password?</a>
-                                </div>
                             </div>
                             <div className="mt-2">
                                 <input type="password"

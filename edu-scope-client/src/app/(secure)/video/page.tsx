@@ -9,7 +9,13 @@ export default function ContentList() {
 
     const {updateHeaderName} = useHeaderStore();
     const router = useRouter();
-    const [videoList, setVideoList] = useState([]);
+    const [videoList, setVideoList] = useState<Video[]>([]);
+
+    type Video = {
+        id: string;
+        title: string;
+        processed: boolean;
+      };
 
     useEffect(() => {
         updateHeaderName('Videos')

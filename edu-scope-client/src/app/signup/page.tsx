@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, {useState} from "react";
 import axios from "axios";
 import { useRouter } from 'next/navigation'
+import {SIGNUP_URL} from "@/app/constant";
 
 export default function Signup() {
     const router = useRouter();
@@ -11,12 +12,14 @@ export default function Signup() {
     const [repeatPassword, setRepeatPassword] = useState("");
     const [name, setName] = useState("");
     const [globalError, setGlobalError] = useState("");
+    
     const [errors, setErrors] = useState<{ email: string, password: string, repeatPassword: string, name: string }>({
         email: "",
         password: "",
         repeatPassword: "",
         name: ""
     })
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrors({
@@ -37,21 +40,16 @@ export default function Signup() {
             return;
         }
 
-        const url = 'http://localhost:8080/auth/signup';
-
-        const data = {
-            "email": email,
-            "name": name,
-            "password": password
-        }
-
         try {
-            const response = await axios.post(url, data, {withCredentials: true});
-            console.log(response);
+            const data = {
+                "email": email,
+                "name": name,
+                "password": password
+            }
+            const response = await axios.post(SIGNUP_URL, data, {withCredentials: true});
             router.push('/dashboard');
 
         } catch (error) {
-            console.log(error)
             setGlobalError(error.response.data.message.join(', '))
         }
 

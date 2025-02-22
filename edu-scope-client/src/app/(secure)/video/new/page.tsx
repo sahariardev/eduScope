@@ -53,7 +53,12 @@ export default function NewVideo() {
 
             const responses = await Promise.all(uploadPromises);
 
-            const etags = [];
+            type EtagType = {
+                ETag: string,
+                PartNumber: string
+            }
+
+            const etags : EtagType[] = [];
 
             responses.forEach((response, index) => {
                 etags.push(
@@ -64,7 +69,7 @@ export default function NewVideo() {
                 );
             });
 
-            const completeRes = await axios.post(VIDEO_UPLOAD_COMPLETE_URL, {
+            await axios.post(VIDEO_UPLOAD_COMPLETE_URL, {
                 fileName: file.name,
                 title: title,
                 totalChunks: totalchunks,
