@@ -1,9 +1,9 @@
 "use client"
 import Link from "next/link";
 import React, {useState} from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {useRouter} from "next/navigation";
-import {SIGNIN_URL} from "@/app/constant";
+import {SIGNIN_URL, extractMessageFromError} from "@/app/constant";
 
 export default function Login() {
     const router = useRouter();
@@ -32,7 +32,7 @@ export default function Login() {
             router.push('/dashboard');
 
         } catch (error) {
-            setGlobalError(error.response.data.message.join(', '))
+            setGlobalError(extractMessageFromError(error))
         }
     }
 
@@ -43,6 +43,11 @@ export default function Login() {
                     <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Login to your
                         account</h2>
                 </div>
+
+                { globalError && <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mt-2.5" role="alert">
+                    <p className="font-bold">Error</p>
+                    <p>{globalError}</p>
+                </div>}
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form className="space-y-6" onSubmit={handleSubmit}>

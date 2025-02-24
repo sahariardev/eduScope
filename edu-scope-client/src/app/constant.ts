@@ -20,3 +20,16 @@ export const VIDEO_GET_ALL_URL = `${BASE_URL}/video/all`;
 
 export const SIGNIN_URL = `${BASE_URL}/auth/signin`;
 export const SIGNUP_URL = `${BASE_URL}/auth/signup`;
+
+
+//utils
+
+export const extractMessageFromError = (error) => {
+    const message = error.response.data.message;
+
+    if(Array.isArray(message)) {
+        return message.join(', ')
+    } else {
+        return message;
+    }
+}

@@ -45,12 +45,11 @@ export default function LessonView({params}) {
 
     const handleOnClicked = async () => {
         try {
-            const response = await axios.post(`${MARK_AS_COMELETED_URL}${resolvedParams.lessonId}`, {}, {withCredentials: true});
+            await axios.post(`${MARK_AS_COMELETED_URL}${resolvedParams.lessonId}`, {}, {withCredentials: true});
             setAlreadyCompleted(!alreadyCompleted);
 
-            router.push(`/course/${courseId}`);
+            router.push(`/videoCourse/${courseId}`);
         } catch (error) {
-            console.error("Error saving progress:", error);
             setGlobalError("Error saving progress");
         }
     }

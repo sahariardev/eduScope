@@ -4,18 +4,13 @@ import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import axios from "axios";
 import {GET_ALL_VIDEO_URL} from "@/app/constant";
+import { VideoType } from "@/types";
 
 export default function ContentList() {
 
     const {updateHeaderName} = useHeaderStore();
     const router = useRouter();
-    const [videoList, setVideoList] = useState<Video[]>([]);
-
-    type Video = {
-        id: string;
-        title: string;
-        processed: boolean;
-      };
+    const [videoList, setVideoList] = useState<VideoType[]>([]);
 
     useEffect(() => {
         updateHeaderName('Videos')
@@ -25,7 +20,6 @@ export default function ContentList() {
         const fetchData = async () => {
             try {
                 const response = await axios.get(GET_ALL_VIDEO_URL, {withCredentials: true});
-                console.log(response.data);
                 setVideoList(response.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
