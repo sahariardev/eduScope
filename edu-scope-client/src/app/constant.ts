@@ -21,6 +21,8 @@ export const VIDEO_GET_ALL_URL = `${BASE_URL}/video/all`;
 export const SIGNIN_URL = `${BASE_URL}/auth/signin`;
 export const SIGNUP_URL = `${BASE_URL}/auth/signup`;
 
+export const GET_ME = `${BASE_URL}/user/me`;
+
 
 //utils
 

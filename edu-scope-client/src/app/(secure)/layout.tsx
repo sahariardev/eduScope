@@ -1,10 +1,10 @@
 'use client'
-import {ReactNode, useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import Link from "next/link";
-import {useHeaderStore} from "@/app/hooks/useHeaderStore";
-import {useRouter} from "next/navigation";
 import PageTitle from "@/app/components/pageTitle";
 import {useNavbarStore} from "@/app/hooks/useNavbarStore";
+import {GET_ME} from "@/app/constant";
+import axios from "axios";
 
 interface Props {
     children: ReactNode;
@@ -13,6 +13,22 @@ interface Props {
 const MainLayout = ({children}: Props) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const {navbarUrls} = useNavbarStore();
+    const [me, setMe] = useState({});
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(GET_ME, {withCredentials: true});
+                console.log(response.data); // Handle the data as needed
+                setMe(response.data);
+                
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();         
+    });
 
     return (
         <div className="flex h-screen ">
@@ -34,6 +50,11 @@ const MainLayout = ({children}: Props) => {
                 <nav className="flex-grow p-4 space-y-4">
 
                     {navbarUrls.map(navbar => {
+
+                        if (navbar.adminUrl && !me.isAdmin) {
+                            return;
+                        }
+
                         return (
                             <Link href={navbar.href} key={navbar.href} className="block px-4 py-2 rounded hover:bg-gray-700" data-title="Dashboard"
                             >

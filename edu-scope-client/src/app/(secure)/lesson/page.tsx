@@ -3,7 +3,7 @@ import {useHeaderStore} from "@/app/hooks/useHeaderStore";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import axios from "axios";
-import {GET_ALL_COURSE_URL, GET_ALL_LESSON_URL} from "@/app/constant";
+import {GET_ALL_LESSON_URL} from "@/app/constant";
 
 export default function ContentList() {
 

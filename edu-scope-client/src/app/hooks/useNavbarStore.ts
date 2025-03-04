@@ -8,15 +8,18 @@ export const useNavbarStore = create((set) => ({
         },
         {
             href: '/course',
-            title: 'Course'
+            title: 'Course',
+            adminUrl: true
         },
         {
             href: '/lesson',
-            title: 'Lesson'
+            title: 'Lesson',
+            adminUrl: true
         },
         {
             href: '/video',
-            title: 'Video'
+            title: 'Video',
+            adminUrl: true
         }
     ],
     updateNavbarList: (urls) => set({navbarUrls: urls})
