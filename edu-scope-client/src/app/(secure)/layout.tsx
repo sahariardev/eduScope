@@ -29,7 +29,7 @@ const MainLayout = ({children}: Props) => {
                 } w-64 bg-gray-800 text-gray-100 flex flex-col transition-transform duration-200 md:translate-x-0 md:relative`}
             >
                 <div className="p-4 font-bold text-lg border-b border-gray-700">
-                    EduScope
+                    <a href='/'>EduScope</a>
                 </div>
                 <nav className="flex-grow p-4 space-y-4">
 

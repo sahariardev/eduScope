@@ -55,7 +55,7 @@ model Lesson {
   courseId    Int
   video       Video?   @relation(fields: [videoId], references: [id])
   videoId     Int? 
-  text        String?
+  text        String?  @db.VarChar(1024)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   createdById Int

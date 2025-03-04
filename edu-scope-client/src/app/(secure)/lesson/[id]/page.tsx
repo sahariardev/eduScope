@@ -14,6 +14,7 @@ export default function EditLesson({params}) {
     const {updateHeaderName} = useHeaderStore();
     const router = useRouter();
     const resolvedParams = React.use(params);
+    console.log(resolvedParams);
 
     useEffect(() => {
         updateHeaderName('Lesson')
@@ -71,8 +72,10 @@ export default function EditLesson({params}) {
             title: title,
             videoId: videoId,
             courseId: courseId,
-            id: resolvedParams.id,
+            id: parseInt(resolvedParams.id),
         }
+
+        console.log(data);
 
         try {
             const response = await axios.post(CREATE_NEW_LESSON_URL, data, {withCredentials: true});

@@ -25,12 +25,12 @@ export default function LessonView({params}) {
             try {
                 const response = await axios.get(GET_ONE_LESSON_URL + resolvedParams.lessonId, {withCredentials: true});
                 const lesson = response.data;
-                setTitle(response.data.title)
-                setHtml(response.data.text)
-                setVideoId(response.data.videoId || '')
+                setTitle(response.data.title);
+                setHtml(response.data.text);
+                setVideoId(response.data.videoId || '');
                 setCourseId(response.data.courseId);
 
-                if(lesson.UserProgress.length > 0) {
+                if (lesson.UserProgress.length > 0) {
                     setAlreadyCompleted(true)
                 }
 
@@ -57,7 +57,7 @@ export default function LessonView({params}) {
     return (
         <div>
             <div>
-                {html}
+            <div dangerouslySetInnerHTML={{ __html: html }} />
             </div>
             {
                 videoId && (

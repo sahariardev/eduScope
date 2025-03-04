@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
 
     //todo:: check if token valid or not
 
-    return NextResponse.redirect(new URL('/dahsboard', request.url))
+    return NextResponse.redirect(new URL('/dashboard', request.url))
 }
 
 export const config = {

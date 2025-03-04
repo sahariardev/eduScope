@@ -14,11 +14,14 @@ export class LessonService {
     async save(dto: LessonDto) {
         try {
             if (dto.id && dto.id != 0) {
+                
                 const lesson = await this.prisma.lesson.findFirst({
                     where: {
                         id: parseInt(String(dto.id))
                     }
                 });
+
+                console.log(lesson)
 
                 if (!lesson) {
                     throw new BadRequestException('Invalid lesson id');
